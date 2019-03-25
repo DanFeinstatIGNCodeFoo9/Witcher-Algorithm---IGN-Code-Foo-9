@@ -38,7 +38,9 @@ data = [
 // and the optimal solution likely uses dynamic programming to make our recursion more efficient.
 //I'm relatively weak on algorith optimization as it was not covered in the bootcamp I attended and
 //I do not have a CS degree, so I'm in the process of teaching myself cs topics.
-//I currently only have practical experience writing in JS, (node backend), so I'll be using it here.
+//I also was a bit too ambitious with my initial chat app plan and burned all my time trying to implement it,
+//realizing I didn't have the time, and switching to a different setup, so I've neglected reading up on this topic
+//enough to reach an optimal answer.
 
 //Brute Force Solution
 
@@ -53,6 +55,7 @@ data = [
 //excluded any combinations that cost more than 300.
 //exclude any combination where av is less than bestValueUnderLimit.av.
 //update bestValueUnderLimit with current object if cost<=300 and av> bestValueUnderLimit.av
+//added a maximum possible cost check in each for loop that skips to the next loop if cost exceeds high acceptable value.
 //time complexity for this is pretty inefficient.
 
 function bruteForceBestAVforCost(dataArray, limit) {
@@ -80,9 +83,49 @@ function bruteForceBestAVforCost(dataArray, limit) {
   }
   for (let j = 0; j < chestArr.length; j++) {
     for (let k = 0; k < helmetArr.length; k++) {
+      let maxHelmetCost =
+        300 -
+        chestArr[j].cost -
+        leggingsArr[leggingsArr.length - 1].cost -
+        bootsArr[bootsArr.length - 1].cost -
+        sortedAV[sortedAV.length - 1].cost;
+
+      if (helmetArr[k].cost > maxHelmetCost) {
+        continue;
+      }
       for (let l = 0; l < leggingsArr.length; l++) {
+        let maxLeggingsCost =
+          300 -
+          chestArr[j].cost -
+          helmetArr[k].cost -
+          bootsArr[bootsArr.length - 1].cost -
+          sortedAV[sortedAV.length - 1].cost;
+
+        if (leggingsArr[l].cost > maxLeggingsCost) {
+          continue;
+        }
         for (let m = 0; m < bootsArr.length; m++) {
+          let maxBootsCost =
+            300 -
+            chestArr[j].cost -
+            helmetArr[k].cost -
+            leggingsArr[l].cost -
+            sortedAV[sortedAV.length - 1].cost;
+
+          if (bootsArr[m].cost > maxBootsCost) {
+            continue;
+          }
           for (let n = 0; n < sortedAV.length; n++) {
+            let maxSortedAVCost =
+              300 -
+              chestArr[j].cost -
+              helmetArr[k].cost -
+              leggingsArr[l].cost -
+              bootsArr[m].cost;
+
+            if (sortedAV[n].cost > maxSortedAVCost) {
+              continue;
+            }
             let names = [
               chestArr[j].name,
               helmetArr[k].name,
@@ -103,7 +146,7 @@ function bruteForceBestAVforCost(dataArray, limit) {
               bootsArr[m].av +
               sortedAV[n].av;
             let combination = { names: names, cost: cost, av: av };
-            if (cost <= limit && av > bestValueUnderLimit.av) {
+            if (av > bestValueUnderLimit.av) {
               bestValueUnderLimit = combination;
             }
           }
@@ -116,16 +159,3 @@ function bruteForceBestAVforCost(dataArray, limit) {
 }
 
 console.log(bruteForceBestAVforCost(data, 300));
-
-//determine max weight value that can be added valueable?
-
-//Insert line 82, change to keep sorted by cost to start
-// let maxHelmetCost =
-//     300 -
-//     chestArr[0].cost -
-//     leggingsArr[leggingsArr.length - 1].cost -
-//     bootsArr[bootsArr.length - 1].cost -
-//     sortedAV[sortedAV.length - 1].cost;
-//   console.log(chestArr);
-//   console.log(chestArr[0].cost);
-//   console.log(`maxHelmetCost: ${maxHelmetCost}`);
