@@ -58,6 +58,19 @@ data = [
 //added a maximum possible cost check in each for loop that skips to the next loop if cost exceeds high acceptable value.
 //time complexity for this is pretty inefficient.
 
+//Answer returned:
+// { names:
+//   [ 'Chestpiece of Vachon',
+//     'Keeton Mask',
+//     'Tattered Shorts',
+//     'Tate\'s Spiked Cleats',
+//     'Chestpiece of Vachon' ],
+//  cost: 299,
+//  av: 103 }
+
+//This function should work for any armor inventory provided
+//assuming it it still split into the same categories and we're given a budget
+
 function bruteForceBestAVforCost(dataArray, limit) {
   let sortedAV = dataArray.sort(function(a, b) {
     return b.av - a.av;
